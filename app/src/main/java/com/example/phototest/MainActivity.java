@@ -63,5 +63,6 @@ public class MainActivity extends AppCompatActivity {
             mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
         }
     }
+    // test comment to see if commit works
 
 }
