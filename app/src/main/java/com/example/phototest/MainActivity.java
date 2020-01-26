@@ -28,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    public void SearchPicture(View v) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+    }
+
+
     public void takePicture(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {//THIS IS A WEIRD ERROR
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ImageView mImageView = (ImageView) findViewById(R.id.ivGallery);
             mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
