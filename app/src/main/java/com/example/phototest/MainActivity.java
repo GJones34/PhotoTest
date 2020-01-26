@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    //links the user to the search activity
     public void SearchPicture(View v) {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             ImageView mImageView = (ImageView) findViewById(R.id.ivGallery);
             mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
         }
+
     }
     // test comment to see if commit works
     // test commit for caption branch

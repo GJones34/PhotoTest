@@ -37,18 +37,20 @@
         android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="yyyyMMdd_HHmmss"
+        android:hint="yyyyMMdd_HHmmss"
+        android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTime" />
 
     <EditText
         android:id="@+id/editText3"
         android:layout_width="271dp"
-        android:layout_height="36dp"
+        android:layout_height="41dp"
         android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="yyyyMMdd_HHmmss"
+        android:hint="yyyyMMdd_HHmmss"
+        android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/editText2"
         app:layout_constraintTop_toBottomOf="@+id/editText2" />
@@ -60,7 +62,8 @@
         android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="caption"
+        android:hint="caption"
+        android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCap" />
@@ -71,6 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
         android:text="Start Date TIme"
+        android:textColor="#5066FF"
         app:layout_constraintBottom_toBottomOf="@+id/editText2"
         app:layout_constraintEnd_toStartOf="@+id/editText2"
         app:layout_constraintTop_toTopOf="@+id/editText2" />
@@ -81,6 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
         android:text="End Date Time"
+        android:textColor="#5066FF"
         app:layout_constraintBottom_toBottomOf="@+id/editText3"
         app:layout_constraintEnd_toStartOf="@+id/editText3"
         app:layout_constraintTop_toTopOf="@+id/editText3" />
@@ -97,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
