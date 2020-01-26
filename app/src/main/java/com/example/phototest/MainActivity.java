@@ -34,10 +34,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Called when submit button is pressed
-    public void addCaption(View view){
+    public void Caption(View view){
         Intent addCaptionIntent = new Intent();
-        EditText userEntry = (EditText) findViewById(R.id.captionEntry);
-        String caption = userEntry.getText().toString();
+        startActivity(addCaptionIntent);
     }
 
     public void takePicture(View v) {
@@ -61,12 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        //Scanner input = new Scanner(System.in);         // CL - create input text scanner
-        //System.out.println( "Enter photo caption: ");   // CL - prompt user input
-        //String caption = input.nextLine();              // CL - read input and load to caption
-        //String imageFileName = "JPEG_" + timeStamp + "_" + caption + "_" ;  // CL - edited to include caption in file name
-        String imageFileName = "JPEG_" + timeStamp + "_" ;
+        String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
