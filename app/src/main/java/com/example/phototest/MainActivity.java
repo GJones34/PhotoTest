@@ -10,12 +10,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+// CL
+import java.util.Scanner;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    // Called when submit button is pressed
+    public void addCaption(View view){
+        Intent addCaptionIntent = new Intent();
+        EditText userEntry = (EditText) findViewById(R.id.captionEntry);
+        String caption = userEntry.getText().toString();
     }
 
     public void takePicture(View v) {
@@ -49,7 +61,12 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        //Scanner input = new Scanner(System.in);         // CL - create input text scanner
+        //System.out.println( "Enter photo caption: ");   // CL - prompt user input
+        //String caption = input.nextLine();              // CL - read input and load to caption
+        //String imageFileName = "JPEG_" + timeStamp + "_" + caption + "_" ;  // CL - edited to include caption in file name
+        String imageFileName = "JPEG_" + timeStamp + "_" ;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
