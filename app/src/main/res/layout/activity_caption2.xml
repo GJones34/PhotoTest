@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CaptionActivity">
+
+    <ImageView
+        android:id="@+id/captionPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:layout_alignParentStart="true"
+
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="true"
+
+
+        android:maxWidth="300dp"
+        android:maxHeight="300dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_launcher" />
+
+    <EditText
+        android:id="@+id/captionEntry"
+        android:layout_width="299dp"
+        android:layout_height="147dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="62dp"
+        android:layout_marginBottom="84dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="(dad jokes welcome)"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/captionSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="34dp"
+        android:onClick="editCaption"
+        android:text="submit" />
+
+    <TextView
+        android:id="@+id/captionPrompt"
+        android:layout_width="177dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/captionEntry"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="175dp"
+        android:layout_marginBottom="12dp"
+        android:text="Photo Caption:"
+        android:textSize="24sp" />
+
+
+</RelativeLayout>

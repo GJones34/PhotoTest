@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     //Initial Variables GJ
     private String mCurrentPhotoPath = null;
     private int currentGalleryIndex = 0;    //GJ Variable to hold position in the photo gallery
-    private ArrayList<String> photoGallery; //GJ Creates a list of strings called photoGallery, used to choose which photo to display
+    public ArrayList<String> photoGallery; //GJ Creates a list of strings called photoGallery, used to choose which photo to display
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Called when submit button is pressed
     public void Caption(View view){
-        Intent addCaptionIntent = new Intent();
+        Intent addCaptionIntent = new Intent(this, CaptionActivity.class);
         startActivity(addCaptionIntent);
     }
 
