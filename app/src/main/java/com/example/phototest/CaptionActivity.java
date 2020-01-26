@@ -13,9 +13,11 @@ public class CaptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_caption);
     }
 
-    public void
+    public void editCaption(){
+        EditText userEntry = (EditText) findViewById(R.id.captionEntry);
+        String caption = userEntry.getText().toString();
+    }
 
-    EditText userEntry = (EditText) findViewById(R.id.captionEntry);
-    caption = userEntry.getText().toString();
+
 
 }
