@@ -58,6 +58,18 @@
         android:onClick="moveRight"
         android:text="Right" />
 
+
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="11dp"
+        android:onClick="SearchPicture"
+        android:text="Search" />
+
     <Button
         android:id="@+id/Caption"
         android:layout_width="wrap_content"
