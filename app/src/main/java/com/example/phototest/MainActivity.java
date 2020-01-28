@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 Searchcaption = data.getStringExtra("CAPTION");
 
                 photoGallery = populateGallery();
-                currentGalleryIndex = 0;
                 mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
                 displayGallery(mCurrentPhotoPath);
             }
@@ -151,13 +151,15 @@ public class MainActivity extends AppCompatActivity {
                 File newFile = new File(file,fileName);
 
                 fList[currentGalleryIndex].renameTo(newFile);
+                photoGallery = populateGallery();
+                mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
+                displayGallery(mCurrentPhotoPath);
 
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE){
             if(resultCode == RESULT_OK) {
                 photoGallery = populateGallery();
-                currentGalleryIndex = 0;
                 mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
                 displayGallery(mCurrentPhotoPath);
             }
@@ -231,8 +233,22 @@ public class MainActivity extends AppCompatActivity {
     //GJ Display the photo on the screen
     private void displayGallery(String path) {
         ImageView mImageView = (ImageView) findViewById(R.id.ivGallery);
+        TextView mDateView = (TextView) findViewById(R.id.timeStamp);
+        TextView mCaptionView = (TextView) findViewById(R.id.captionText);
+
         mImageView.setRotation(90);
         mImageView.setImageBitmap(BitmapFactory.decodeFile(path));
+        if(path != null) {
+            String[] attr = path.split("_");
+
+            if (attr.length == 5) {
+                mDateView.setText(attr[1]);
+                mCaptionView.setText(attr[3]);
+            } else {
+                mDateView.setText(attr[1]);
+                mCaptionView.setText("");
+            }
+        }
     }
 
     //GJ When the left button is clicked, calls this function to move a pointer and display the image

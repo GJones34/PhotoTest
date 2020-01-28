@@ -10,19 +10,19 @@
         android:id="@+id/ivGallery"
         android:layout_width="wrap_content"
         android:layout_height="400dp"
-        android:src="@mipmap/ic_launcher"
-
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
+
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-
-
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:adjustViewBounds="true"
-        android:maxHeight="300dp"
+
+
         android:maxWidth="300dp"
-        android:scaleType="fitXY" />
+        android:maxHeight="300dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher" />
 
     <Button
         android:id="@+id/btnSnap"
@@ -82,5 +82,33 @@
         android:onClick="Caption"
         android:text="caption" />
 
+
+    <TextView
+        android:id="@+id/timeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/left"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="-15dp"
+        android:layout_marginBottom="89dp"
+        android:layout_toStartOf="@+id/right"
+        android:text="TimeStamp"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/captionText"
+        android:layout_width="151dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/left"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="-13dp"
+        android:layout_marginBottom="44dp"
+        android:layout_toStartOf="@+id/right"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
