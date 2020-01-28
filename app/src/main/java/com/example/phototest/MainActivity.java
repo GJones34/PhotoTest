@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     // Called when submit button is pressed
     public void Caption(View view){
         Intent addCaptionIntent = new Intent(this, CaptionActivity.class);
+        addCaptionIntent.putExtra("path", mCurrentPhotoPath);
         startActivityForResult(addCaptionIntent, CAPTION_SET_CODE);
     }
 
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String[] editName = fileName.split("_");
 
-                fileName = editName[0] + "_" + editName[1] + "_" + editName [2] + "_" + photoCaption + ".jpeg";
+                fileName = editName[0] + "_" + editName[1] + "_" + editName [2] + "_" + photoCaption + "_" + editName[3];
 
                 File newFile = new File(file,fileName);
 
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 Combo = separated[1] + separated[2];
                 Date = Long.parseLong(Combo);
 
-                if(separated.length == 4){
+                if(separated.length == 5){
                     FileCap = separated[3];
                 }else{
                     FileCap = "-";
