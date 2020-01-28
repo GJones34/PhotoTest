@@ -143,12 +143,14 @@ public class MainActivity extends AppCompatActivity {
                 File[] fList = file.listFiles();
                 String fileName = fList[currentGalleryIndex].getName();
 
-                fileName = photoCaption + fileName;
+                String[] editName = fileName.split("_");
+
+                fileName = editName[0] + "_" + editName[1] + "_" + editName [2] + "_" + photoCaption + ".jpeg";
 
                 File newFile = new File(file,fileName);
 
                 fList[currentGalleryIndex].renameTo(newFile);
-                
+
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE){
@@ -183,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
                 Combo = separated[1] + separated[2];
                 Date = Long.parseLong(Combo);
 
-                if(separated.length == 5){
+                if(separated.length == 4){
                     FileCap = separated[3];
                 }else{
-                    FileCap = "";
+                    FileCap = "-";
                 }
                 //////////////////
 
