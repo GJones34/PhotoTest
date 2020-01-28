@@ -2,6 +2,7 @@ package com.example.phototest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -17,14 +18,16 @@ public class CaptionActivity extends AppCompatActivity {
     }
 
     public void editCaption(View view){
-        EditText userEntry = (EditText) findViewById(R.id.captionEntry);
-        String caption = userEntry.getText().toString();
+        EditText caption = findViewById(R.id.captionEntry);
 
+        Intent c = new Intent();
+        c.putExtra("CAPTIONEDIT", caption.getText().toString());
+        setResult(RESULT_OK, c);
 
         finish();
     }
 
-
+    public void cancelCaption (View view){finish();}
 
 
 }

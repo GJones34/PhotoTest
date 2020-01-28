@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+
 public class MainActivity extends AppCompatActivity {
     //Initial Variables GJ
     private String mCurrentPhotoPath = null;
@@ -29,11 +30,13 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> photoGallery; //GJ Creates a list of strings called photoGallery, used to choose which photo to display
 
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 0;
+    public static final int CAPTION_SET_CODE = 2;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     String SearchStartDate = "-";
     String SearchEndDate = "-";
     String Searchcaption = "-";
+    String photoCaption = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     // Called when submit button is pressed
     public void Caption(View view){
         Intent addCaptionIntent = new Intent(this, CaptionActivity.class);
-        startActivity(addCaptionIntent);
+        startActivityForResult(addCaptionIntent, CAPTION_SET_CODE);
     }
 
     public void takePicture(View v) {
@@ -129,6 +132,25 @@ public class MainActivity extends AppCompatActivity {
                 displayGallery(mCurrentPhotoPath);
             }
         }
+        if (requestCode == CAPTION_SET_CODE){
+            if(resultCode == RESULT_OK){
+
+                photoCaption = data.getStringExtra("CAPTIONEDIT");
+
+                File file = new File(Environment.getExternalStorageDirectory()
+                        .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
+
+                File[] fList = file.listFiles();
+                String fileName = fList[currentGalleryIndex].getName();
+
+                fileName = photoCaption + fileName;
+
+                File newFile = new File(file,fileName);
+
+                fList[currentGalleryIndex].renameTo(newFile);
+                
+            }
+        }
         if (requestCode == REQUEST_IMAGE_CAPTURE){
             if(resultCode == RESULT_OK) {
                 photoGallery = populateGallery();
@@ -157,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             for (File f : file.listFiles()) {
                 Filename = f.getName();
                 String[] separated = Filename.split("_");
+
                 Combo = separated[1] + separated[2];
                 Date = Long.parseLong(Combo);
 
