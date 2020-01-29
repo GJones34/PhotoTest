@@ -11,12 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="144dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="120dp"
         android:text="Captions"
         android:textColor="#5066FF"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3" />
+        app:layout_constraintTop_toBottomOf="@+id/StartDate" />
 
     <TextView
         android:id="@+id/textTime"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/StartDate"
         android:layout_width="272dp"
         android:layout_height="45dp"
         android:layout_marginTop="40dp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textTime" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/EndDate"
         android:layout_width="271dp"
         android:layout_height="41dp"
         android:layout_marginTop="40dp"
@@ -52,8 +52,8 @@
         android:hint="yyyyMMddHHmmss"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editText2"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintStart_toStartOf="@+id/StartDate"
+        app:layout_constraintTop_toBottomOf="@+id/StartDate" />
 
     <EditText
         android:id="@+id/editText4"
@@ -75,9 +75,9 @@
         android:layout_marginEnd="5dp"
         android:text="Start Date TIme"
         android:textColor="#5066FF"
-        app:layout_constraintBottom_toBottomOf="@+id/editText2"
-        app:layout_constraintEnd_toStartOf="@+id/editText2"
-        app:layout_constraintTop_toTopOf="@+id/editText2" />
+        app:layout_constraintBottom_toBottomOf="@+id/StartDate"
+        app:layout_constraintEnd_toStartOf="@+id/StartDate"
+        app:layout_constraintTop_toTopOf="@+id/StartDate" />
 
     <TextView
         android:id="@+id/textView3"
@@ -86,12 +86,12 @@
         android:layout_marginEnd="5dp"
         android:text="End Date Time"
         android:textColor="#5066FF"
-        app:layout_constraintBottom_toBottomOf="@+id/editText3"
-        app:layout_constraintEnd_toStartOf="@+id/editText3"
-        app:layout_constraintTop_toTopOf="@+id/editText3" />
+        app:layout_constraintBottom_toBottomOf="@+id/EndDate"
+        app:layout_constraintEnd_toStartOf="@+id/EndDate"
+        app:layout_constraintTop_toTopOf="@+id/EndDate" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/Searchbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -102,14 +102,14 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/Cancelbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
         android:text="@android:string/cancel"
         android:onClick="Cancel"
-        app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintTop_toTopOf="@+id/button" />
+        app:layout_constraintEnd_toStartOf="@+id/Searchbutton"
+        app:layout_constraintTop_toTopOf="@+id/Searchbutton" />
 
     <TextView
         android:id="@+id/textView4"

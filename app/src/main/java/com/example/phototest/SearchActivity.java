@@ -17,8 +17,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void Search(View v) {
-        EditText starttime = findViewById(R.id.editText2);
-        EditText endtime = findViewById(R.id.editText3);
+        EditText starttime = findViewById(R.id.StartDate);
+        EditText endtime = findViewById(R.id.EndDate);
         EditText caption = findViewById(R.id.editText4);
 
         Intent i = new Intent();
