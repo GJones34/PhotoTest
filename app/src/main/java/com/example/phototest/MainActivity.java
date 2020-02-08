@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import static java.lang.Math.asin;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 
 public class MainActivity extends AppCompatActivity {
     //Initial Variables GJ
@@ -37,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     String SearchStartDate = "-";
     String SearchEndDate = "-";
     String Searchcaption = "-";
+    String SearchLatitude = "-";
+    String SearchLongitude = "-";
+    String SearchRadius = "-";
+
     String photoCaption = "";
 
     @Override
@@ -127,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
                 SearchStartDate = data.getStringExtra("STARTDATE");
                 SearchEndDate = data.getStringExtra("ENDDATE");
                 Searchcaption = data.getStringExtra("CAPTION");
+                SearchLatitude = data.getStringExtra("LATITUDE");
+                SearchLongitude = data.getStringExtra("LONGITUDE");
+                SearchRadius = data.getStringExtra("RADIUS");
 
                 photoGallery = populateGallery();
                 mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
@@ -176,10 +188,13 @@ public class MainActivity extends AppCompatActivity {
             boolean  SearchminDateStatus;
             boolean  SearchmaxDateStatus;
             boolean  SearchcaptionStatus;
+            boolean  SearchLocationStatus;
             String FileCap;
             String Filename;
             String Combo;
             long Date;
+            float LAT;
+            float LON;
 
             for (File f : file.listFiles()) {
                 Filename = f.getName();
@@ -187,9 +202,11 @@ public class MainActivity extends AppCompatActivity {
 
                 Combo = separated[1] + separated[2];
                 Date = Long.parseLong(Combo);
+                LAT = Float.parseFloat(separated[3]);
+                LON = Float.parseFloat(separated[4]);
 
-                if(separated.length == 5){
-                    FileCap = separated[3];
+                if(separated.length == 7){
+                    FileCap = separated[5];
                 }else{
                     FileCap = "-";
                 }
@@ -218,8 +235,19 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     SearchcaptionStatus = false;
                 }
+                /////////////////////////////////////////////WIP
 
-                if((SearchminDateStatus == true)&&(SearchmaxDateStatus == true)&&(SearchcaptionStatus == true)){
+                if(SearchLatitude.equals("-")||SearchLongitude.equals("-")||SearchRadius.equals("-")){
+                    SearchLocationStatus = true;
+                }else if(DistanceCoords(LAT,LON,Float.parseFloat(SearchLatitude),Float.parseFloat(SearchLongitude)) < Double.parseDouble(SearchRadius)){///////////////////////////////////////////////////////////////////NEEDS EDIT AFTER FUNCTION IS COMPLETE
+                    SearchLocationStatus = true;
+                }else{
+                    SearchLocationStatus = false;
+                }
+
+                /////////////////////////////////////////////WIP
+
+                if((SearchminDateStatus == true)&&(SearchmaxDateStatus == true)&&(SearchcaptionStatus == true)&&(SearchLocationStatus == true)){
                     photoGallery.add(f.getPath());
                 }
 
@@ -229,6 +257,21 @@ public class MainActivity extends AppCompatActivity {
         }
         return photoGallery;
     }
+
+
+    //LA Determine distance between Coordinates 1 and 2
+    private double DistanceCoords(float Lat1, float Long1, float Lat2, float Long2) {
+        float EarthRad = 6371;
+        double dLat = (3.1415/180)*(Lat2 - Lat1);
+        double dLong = (3.1419/180)*(Long2 - Long1);
+
+        double a = sin(dLat/2) * sin(dLat/2) + cos((3.1415/180)*Lat1) * cos((3.1415/180)*Lat2) * sin(dLong/2) * sin(dLong/2);
+        double c = 2*asin(sqrt(a));
+        double d = EarthRad * c;
+
+        return d;
+    }
+
 
     //GJ Display the photo on the screen
     private void displayGallery(String path) {

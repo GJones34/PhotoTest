@@ -24,7 +24,7 @@ public class UITests {
             onView(withId(R.id.btnSearch)).perform(click());
             onView(withId(R.id.EndDate)).perform(typeText("20200201000000"), closeSoftKeyboard());
             onView(withId(R.id.StartDate)).perform(typeText("20200101000000"), closeSoftKeyboard());
-            onView(withId(R.id.editText4)).perform(typeText("-"), closeSoftKeyboard());
+            onView(withId(R.id.Caption)).perform(typeText("-"), closeSoftKeyboard());
             onView(withId(R.id.Searchbutton)).perform(click());
             for (int i = 0; i <= 5; i++) {
                 onView(withId(R.id.right)).perform(click());
