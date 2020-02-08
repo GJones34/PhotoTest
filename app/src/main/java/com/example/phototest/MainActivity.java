@@ -316,4 +316,22 @@ public class MainActivity extends AppCompatActivity {
         displayGallery(mCurrentPhotoPath);
     }
 
+    public void UploadPicture(View v) {
+
+        String PACKAGE_NAME = "com.yahoo.mobile.client.android.flickr";
+
+        getPackageManager().getApplicationInfo(PACKAGE_NAME, 0);
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+        shareIntent.setType("image/*");
+
+        shareIntent.putExtra(Intent.EXTRA_TEXT, ((EditText) findViewById(R.id.etCaption)).getText().toString());
+
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + ((EditText) findViewById(R.id.etCaption)).getText().toString());
+
+        File file = new File(photos.get(index));
+
+    }
+
 }
