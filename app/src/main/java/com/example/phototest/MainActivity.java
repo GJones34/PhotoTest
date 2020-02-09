@@ -1,11 +1,18 @@
 package com.example.phototest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Location;
+import android.location.LocationManager;
+import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.app.Activity;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +47,12 @@ public class MainActivity extends AppCompatActivity {
     String Searchcaption = "-";
     String photoCaption = "";
 
+    LocationManager locationManager;
+
+    int TEST = 1;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -57,6 +69,20 @@ public class MainActivity extends AppCompatActivity {
         if (photoGallery.size() > 0)
             mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
         displayGallery(mCurrentPhotoPath);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        TEST);
+            }
+        } else {
+        }
     }
 
     //GJ Populate a photogallery so that the code hopefully stops breaking. Crashes all the bloody time,
@@ -66,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
         photoGallery = new ArrayList<String>();
-        File [] fList = file.listFiles();
+        File[] fList = file.listFiles();
         if (fList != null) {
             for (File f : file.listFiles()) {
                 photoGallery.add(f.getPath());
@@ -83,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Called when submit button is pressed
-    public void Caption(View view){
+    public void Caption(View view) {
         Intent addCaptionIntent = new Intent(this, CaptionActivity.class);
         addCaptionIntent.putExtra("path", mCurrentPhotoPath);
         startActivityForResult(addCaptionIntent, CAPTION_SET_CODE);
@@ -112,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg",storageDir);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
         Log.d("createImageFile", mCurrentPhotoPath);
         return image;
@@ -133,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
                 displayGallery(mCurrentPhotoPath);
             }
         }
-        if (requestCode == CAPTION_SET_CODE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == CAPTION_SET_CODE) {
+            if (resultCode == RESULT_OK) {
 
                 photoCaption = data.getStringExtra("CAPTIONEDIT");
 
@@ -146,9 +172,9 @@ public class MainActivity extends AppCompatActivity {
 
                 String[] editName = fileName.split("_");
 
-                fileName = editName[0] + "_" + editName[1] + "_" + editName [2] + "_" + photoCaption + "_" + editName[3];
+                fileName = editName[0] + "_" + editName[1] + "_" + editName[2] + "_" + photoCaption + "_" + editName[3];
 
-                File newFile = new File(file,fileName);
+                File newFile = new File(file, fileName);
 
                 fList[currentGalleryIndex].renameTo(newFile);
                 photoGallery = populateGallery();
@@ -157,9 +183,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-        if (requestCode == REQUEST_IMAGE_CAPTURE){
-            if(resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
                 photoGallery = populateGallery();
+                try {
+                    GPSLocation();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
                 displayGallery(mCurrentPhotoPath);
             }
@@ -173,9 +204,9 @@ public class MainActivity extends AppCompatActivity {
         photoGallery = new ArrayList<String>();
         File[] fList = file.listFiles();
         if (fList != null) {
-            boolean  SearchminDateStatus;
-            boolean  SearchmaxDateStatus;
-            boolean  SearchcaptionStatus;
+            boolean SearchminDateStatus;
+            boolean SearchmaxDateStatus;
+            boolean SearchcaptionStatus;
             String FileCap;
             String Filename;
             String Combo;
@@ -188,38 +219,38 @@ public class MainActivity extends AppCompatActivity {
                 Combo = separated[1] + separated[2];
                 Date = Long.parseLong(Combo);
 
-                if(separated.length == 5){
+                if (separated.length == 5) {
                     FileCap = separated[3];
-                }else{
+                } else {
                     FileCap = "-";
                 }
                 //////////////////
 
-                if(SearchStartDate.equals("-")){
+                if (SearchStartDate.equals("-")) {
                     SearchminDateStatus = true;
-                }else if(Long.parseLong(SearchStartDate) < Date){
+                } else if (Long.parseLong(SearchStartDate) < Date) {
                     SearchminDateStatus = true;
-                }else{
+                } else {
                     SearchminDateStatus = false;
                 }
 
-                if(SearchEndDate.equals("-")){
+                if (SearchEndDate.equals("-")) {
                     SearchmaxDateStatus = true;
-                }else if(Long.parseLong(SearchEndDate) > Date){
+                } else if (Long.parseLong(SearchEndDate) > Date) {
                     SearchmaxDateStatus = true;
-                }else{
+                } else {
                     SearchmaxDateStatus = false;
                 }
 
-                if(Searchcaption.equals("-")){
+                if (Searchcaption.equals("-")) {
                     SearchcaptionStatus = true;
-                }else if(FileCap.toLowerCase().contains(Searchcaption.toLowerCase())){
+                } else if (FileCap.toLowerCase().contains(Searchcaption.toLowerCase())) {
                     SearchcaptionStatus = true;
-                }else{
+                } else {
                     SearchcaptionStatus = false;
                 }
 
-                if((SearchminDateStatus == true)&&(SearchmaxDateStatus == true)&&(SearchcaptionStatus == true)){
+                if ((SearchminDateStatus == true) && (SearchmaxDateStatus == true) && (SearchcaptionStatus == true)) {
                     photoGallery.add(f.getPath());
                 }
 
@@ -238,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
 
         mImageView.setRotation(90);
         mImageView.setImageBitmap(BitmapFactory.decodeFile(path));
-        if(path != null) {
+        if (path != null) {
             String[] attr = path.split("_");
 
             if (attr.length == 5) {
@@ -255,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
     //to the left
     public void moveLeft(View v) {
         --currentGalleryIndex;
-        if(currentGalleryIndex < 0)
+        if (currentGalleryIndex < 0)
             currentGalleryIndex = 0;
 
         mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
@@ -266,11 +297,51 @@ public class MainActivity extends AppCompatActivity {
     //to the right
     public void moveRight(View v) {
         ++currentGalleryIndex;
-        if(currentGalleryIndex >= photoGallery.size())
+        if (currentGalleryIndex >= photoGallery.size())
             currentGalleryIndex = photoGallery.size() - 1;
 
         mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
         displayGallery(mCurrentPhotoPath);
     }
 
+
+    public void GPSLocation() throws IOException {
+
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return;
+        }
+        /*//boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        //boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        double lat = lastKnownLocation.getLatitude();
+        double lng = lastKnownLocation.getLongitude(); */
+
+
+        File file = new File(Environment.getExternalStorageDirectory()
+                .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
+        File[] fList = file.listFiles();
+
+        ExifInterface exif = new ExifInterface(fList[currentGalleryIndex]);
+        String lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+        String lng = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+
+        String fileName = fList[currentGalleryIndex].getName();
+
+        String[] editName = fileName.split("_");
+
+        fileName = editName[0] + "_" + editName[1] + "_" + editName [2] + "_" + lat + "_" + lng + "_" + editName[3];
+
+        File newFile = new File(file,fileName);
+
+        fList[currentGalleryIndex].renameTo(newFile);
+        photoGallery = populateGallery();
+    }
 }
