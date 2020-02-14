@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     String SearchLatitude = "-";
     String SearchLongitude = "-";
     String SearchRadius = "-";
-
     String photoCaption = "";
 
     @Override
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg",storageDir);
+        File image = File.createTempFile(imageFileName, ".jpeg",storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
         Log.d("createImageFile", mCurrentPhotoPath);
         return image;
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Update the gallery with new search criteria
+    //LA Updates the gallery with new search criteria
     private ArrayList<String> populateGallery() {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
@@ -189,14 +188,15 @@ public class MainActivity extends AppCompatActivity {
             boolean  SearchmaxDateStatus;
             boolean  SearchcaptionStatus;
             boolean  SearchLocationStatus;
-            String FileCap;
+            String FileCap = "-";
             String Filename;
             String Combo;
-            long Date;
-            float LAT;
-            float LON;
+            long Date = 0;
+            float LAT = 0;
+            float LON = 0;
 
             for (File f : file.listFiles()) {
+                /*
                 Filename = f.getName();
                 String[] separated = Filename.split("_");
 
@@ -210,7 +210,9 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     FileCap = "-";
                 }
-                //////////////////
+                //////////////////commented out until location tagging is complete
+
+                 */
 
                 if(SearchStartDate.equals("-")){
                     SearchminDateStatus = true;
@@ -316,22 +318,21 @@ public class MainActivity extends AppCompatActivity {
         displayGallery(mCurrentPhotoPath);
     }
 
+    //LA Uploads photo currently being viewed in the gallery to facebook as your profile pic
     public void UploadPicture(View v) {
 
-        String PACKAGE_NAME = "com.yahoo.mobile.client.android.flickr";
+        File file = new File(Environment.getExternalStorageDirectory()
+                .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
+        File[] fList = file.listFiles();
+        String Filename = "/storage/emulated/0/Android/data/com.example.phototest/files/Pictures/" + fList[currentGalleryIndex].getName();
+        Uri uri = Uri.parse(Filename);
 
-        getPackageManager().getApplicationInfo(PACKAGE_NAME, 0);
-
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
+        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
         shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri); // set uri
+        shareIntent.setPackage("com.facebook.katana");
+        startActivity(shareIntent);
 
-        shareIntent.putExtra(Intent.EXTRA_TEXT, ((EditText) findViewById(R.id.etCaption)).getText().toString());
-
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + ((EditText) findViewById(R.id.etCaption)).getText().toString());
-
-        File file = new File(photos.get(index));
-
-    }
+       }
 
 }

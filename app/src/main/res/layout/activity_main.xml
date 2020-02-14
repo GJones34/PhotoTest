@@ -16,9 +16,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+
+
+        android:layout_marginTop="0dp"
         android:adjustViewBounds="true"
-
-
         android:maxWidth="300dp"
         android:maxHeight="300dp"
         android:scaleType="centerCrop"
@@ -27,7 +28,7 @@
     <Button
         android:id="@+id/btnSnap"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="11dp"
@@ -43,7 +44,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="11dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="66dp"
         android:onClick="moveLeft"
         android:text="Left" />
 
@@ -54,7 +55,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="11dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="66dp"
         android:onClick="moveRight"
         android:text="Right" />
 
@@ -62,7 +63,7 @@
     <Button
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="11dp"
@@ -74,10 +75,10 @@
     <Button
         android:id="@+id/Caption"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="63dp"
-        android:layout_marginEnd="63dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="11dp"
         android:layout_toStartOf="@+id/btnSearch"
         android:layout_toEndOf="@+id/btnSnap"
@@ -87,11 +88,11 @@
     <Button
         android:id="@+id/Upload"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="63dp"
-        android:layout_marginEnd="63dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="66dp"
         android:layout_toStartOf="@+id/right"
         android:layout_toEndOf="@+id/left"
         android:onClick="UploadPicture"
@@ -99,13 +100,12 @@
 
     <TextView
         android:id="@+id/timeStamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="436dp"
-        android:layout_marginEnd="28dp"
-        android:layout_toStartOf="@+id/right"
+        android:layout_width="201dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/ivGallery"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="106dp"
         android:text="TimeStamp"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -113,13 +113,12 @@
 
     <TextView
         android:id="@+id/captionText"
-        android:layout_width="151dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="504dp"
-        android:layout_marginEnd="31dp"
-        android:layout_toStartOf="@+id/right"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/timeStamp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="107dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="30sp"

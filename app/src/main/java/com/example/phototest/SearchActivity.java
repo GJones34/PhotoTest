@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+//LA activity used to enter search criteria
 public class SearchActivity extends AppCompatActivity {
 
     @Override
