@@ -18,9 +18,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+
+
+        android:layout_marginTop="0dp"
         android:adjustViewBounds="true"
-
-
         android:maxWidth="300dp"
         android:maxHeight="300dp"
         android:scaleType="centerCrop"
@@ -33,7 +34,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="11dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="35dp"
         android:layout_marginBottom="9dp"
         android:layout_toStartOf="@+id/Caption"
         android:backgroundTint="#413F3F"
@@ -48,7 +49,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="40dp"
         android:layout_marginLeft="60dp"
         android:layout_marginBottom="72dp"
         android:backgroundTint="#413F3F"
@@ -56,16 +57,15 @@
         android:text="Left"
         android:textColor="#FAE6E9EB" />
 
-
     <Button
         android:id="@+id/right"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="60dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginRight="60dp"
-        android:layout_marginBottom="74dp"
+        android:layout_marginBottom="72dp"
         android:backgroundTint="#413F3F"
         android:onClick="moveRight"
         android:text="Right"
@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="35dp"
         android:layout_marginEnd="11dp"
         android:layout_marginBottom="9dp"
         android:layout_toEndOf="@+id/Caption"
@@ -86,20 +86,34 @@
         android:text="Search"
         android:textColor="#FAE6E9EB" />
 
-
     <Button
         android:id="@+id/Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
         android:layout_marginBottom="9dp"
         android:layout_toStartOf="@+id/right"
         android:layout_toEndOf="@+id/left"
         android:backgroundTint="#413F3F"
         android:onClick="Caption"
         android:text="caption"
+        android:textColor="#FAE6E9EB" />
+
+    <Button
+        android:id="@+id/Upload"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="150dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="72dp"
+        android:backgroundTint="#413F3F"
+        android:onClick="UploadPicture"
+        android:text="Upload"
         android:textColor="#FAE6E9EB" />
 
     <TextView

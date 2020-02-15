@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+//LA activity used to enter search criteria
 public class SearchActivity extends AppCompatActivity {
 
     @Override
@@ -17,14 +18,20 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void Search(View v) {
-        EditText starttime = findViewById(R.id.editText2);
-        EditText endtime = findViewById(R.id.editText3);
-        EditText caption = findViewById(R.id.editText4);
+        EditText starttime = findViewById(R.id.StartDate);
+        EditText endtime = findViewById(R.id.EndDate);
+        EditText caption = findViewById(R.id.Caption);
+        EditText latitude = findViewById(R.id.Latitude);
+        EditText longitude = findViewById(R.id.Longitude);
+        EditText radius = findViewById(R.id.Radius);
 
         Intent i = new Intent();
         i.putExtra("STARTDATE", starttime.getText().toString());
         i.putExtra("ENDDATE", endtime.getText().toString());
         i.putExtra("CAPTION", caption.getText().toString());
+        i.putExtra("LATITUDE", latitude.getText().toString());
+        i.putExtra("LONGITUDE", longitude.getText().toString());
+        i.putExtra("RADIUS", radius.getText().toString());
         setResult(RESULT_OK, i);
         finish();
     }

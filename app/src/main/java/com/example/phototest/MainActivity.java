@@ -34,6 +34,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import static java.lang.Math.asin;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 
 public class MainActivity extends AppCompatActivity {
     //Initial Variables GJ
@@ -48,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     String SearchStartDate = "-";
     String SearchEndDate = "-";
     String Searchcaption = "-";
+    String SearchLatitude = "-";
+    String SearchLongitude = "-";
+    String SearchRadius = "-";
     String photoCaption = "";
     String lat = "";
     String lng = "";
@@ -163,6 +171,9 @@ public class MainActivity extends AppCompatActivity {
                 SearchStartDate = data.getStringExtra("STARTDATE");
                 SearchEndDate = data.getStringExtra("ENDDATE");
                 Searchcaption = data.getStringExtra("CAPTION");
+                SearchLatitude = data.getStringExtra("LATITUDE");
+                SearchLongitude = data.getStringExtra("LONGITUDE");
+                SearchRadius = data.getStringExtra("RADIUS");
 
                 photoGallery = populateGallery();
                 mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
@@ -182,8 +193,13 @@ public class MainActivity extends AppCompatActivity {
 
                 String[] editName = fileName.split("_");
 
-                fileName = editName[0] + "_" + editName[1] + "_" + editName[2] + "_" + photoCaption + "_" + editName[3] + "_" +
-                editName[4] + "_" + editName[5];
+                if (editName.length == 6) {
+                    fileName = editName[0] + "_" + editName[1] + "_" + editName[2] + "_" + photoCaption + "_" + editName[3] + "_" +
+                            editName[4] + "_" + editName[5];
+                }else{
+                    fileName = editName[0] + "_" + editName[1] + "_" + editName[2] + "_" + photoCaption + "_" + editName[4] + "_" +
+                            editName[5] + "_" + editName[6];
+                }
 
                 File newFile = new File(file, fileName);
 
@@ -196,32 +212,35 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                photoGallery = populateGallery();
                 try {
                     GPSLocation();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                photoGallery = populateGallery();
                 mCurrentPhotoPath = photoGallery.get(currentGalleryIndex);
                 displayGallery(mCurrentPhotoPath);
             }
         }
     }
 
-    //Update the gallery with new search criteria
+    //LA Updates the gallery with new search criteria
     private ArrayList<String> populateGallery() {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
         photoGallery = new ArrayList<String>();
         File[] fList = file.listFiles();
         if (fList != null) {
-            boolean SearchminDateStatus;
-            boolean SearchmaxDateStatus;
-            boolean SearchcaptionStatus;
-            String FileCap;
+            boolean  SearchminDateStatus;
+            boolean  SearchmaxDateStatus;
+            boolean  SearchcaptionStatus;
+            boolean  SearchLocationStatus;
+            String FileCap = "-";
             String Filename;
             String Combo;
-            long Date;
+            long Date = 0;
+            float LAT = 0;
+            float LON = 0;
 
             for (File f : file.listFiles()) {
                 Filename = f.getName();
@@ -229,13 +248,21 @@ public class MainActivity extends AppCompatActivity {
 
                 Combo = separated[1] + separated[2];
                 Date = Long.parseLong(Combo);
+                if (separated.length == 7) {
+                    LAT = Float.parseFloat(separated[4]);
+                    LON = Float.parseFloat(separated[5]);
+                }else{
+                    LAT = Float.parseFloat(separated[3]);
+                    LON = Float.parseFloat(separated[4]);
+                }
 
-                if (separated.length == 5) {
-                    FileCap = separated[3];
-                } else {
+                if(separated.length == 7){
+                    FileCap = separated[5];
+                }else{
                     FileCap = "-";
                 }
-                //////////////////
+                //////////////////commented out until location tagging is complete
+
 
                 if (SearchStartDate.equals("-")) {
                     SearchminDateStatus = true;
@@ -260,6 +287,15 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     SearchcaptionStatus = false;
                 }
+                /////////////////////////////////////////////WIP
+
+                if(SearchLatitude.equals("-")||SearchLongitude.equals("-")||SearchRadius.equals("-")){
+                    SearchLocationStatus = true;
+                }else if(DistanceCoords(LAT,LON,Float.parseFloat(SearchLatitude),Float.parseFloat(SearchLongitude)) < Double.parseDouble(SearchRadius)){///////////////////////////////////////////////////////////////////NEEDS EDIT AFTER FUNCTION IS COMPLETE
+                    SearchLocationStatus = true;
+                }else{
+                    SearchLocationStatus = false;
+                }
 
                 if ((SearchminDateStatus == true) && (SearchmaxDateStatus == true) && (SearchcaptionStatus == true)) {
                     photoGallery.add(f.getPath());
@@ -271,6 +307,21 @@ public class MainActivity extends AppCompatActivity {
         }
         return photoGallery;
     }
+
+
+    //LA Determine distance between Coordinates 1 and 2
+    private double DistanceCoords(float Lat1, float Long1, float Lat2, float Long2) {
+        float EarthRad = 6371;
+        double dLat = (3.1415/180)*(Lat2 - Lat1);
+        double dLong = (3.1419/180)*(Long2 - Long1);
+
+        double a = sin(dLat/2) * sin(dLat/2) + cos((3.1415/180)*Lat1) * cos((3.1415/180)*Lat2) * sin(dLong/2) * sin(dLong/2);
+        double c = 2*asin(sqrt(a));
+        double d = EarthRad * c;
+
+        return d;
+    }
+
 
     //GJ Display the photo on the screen
     private void displayGallery(String path) {
@@ -365,5 +416,22 @@ public class MainActivity extends AppCompatActivity {
 
         fList[currentGalleryIndex].renameTo(newFile);
         photoGallery = populateGallery();
+    }
+
+    //LA Uploads photo currently being viewed in the gallery to facebook as your profile pic
+    public void UploadPicture(View v) {
+
+        File file = new File(Environment.getExternalStorageDirectory()
+                .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
+        File[] fList = file.listFiles();
+        String Filename = "/storage/emulated/0/Android/data/com.example.phototest/files/Pictures/" + fList[currentGalleryIndex].getName();
+        Uri uri = Uri.parse(Filename);
+
+        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri); // set uri
+        shareIntent.setPackage("com.facebook.katana");
+        startActivity(shareIntent);
+
     }
 }
