@@ -284,14 +284,20 @@ public class MainActivity extends AppCompatActivity {
         mImageView.setImageBitmap(BitmapFactory.decodeFile(path));
         if (path != null) {
             String[] attr = path.split("_");
+            /*Regex statement to split up the date string, splits it into an array of chars
+            then prints them out with dashes between for better visibility
+             */
+            String[] sdate = attr[1].split("(?!^)");
 
             if (attr.length == 7) {
-                mDateView.setText(attr[1]);
+                mDateView.setText(sdate[0] + sdate[1] + sdate[2] + sdate[3] +
+                        "-" + sdate[4] + sdate[5] + "-" + sdate[6] + sdate[7]);
                 mCaptionView.setText(attr[3]);
                 mLatView.setText(attr[4] + " Latitude");
                 mLngView.setText(attr[5] + " Longitude");
             } else {
-                mDateView.setText(attr[1]);
+                mDateView.setText(sdate[0] + sdate[1] + sdate[2] + sdate[3] +
+                        "-" + sdate[4] + sdate[5] + "-" + sdate[6] + sdate[7]);
                 mLatView.setText(attr[3] + " Latitude");
                 mLngView.setText(attr[4] + " Longitude");
                 mCaptionView.setText("");
@@ -342,8 +348,8 @@ public class MainActivity extends AppCompatActivity {
         //Turns out this code just blitzes through at the speed of light and doesn't allow process' to finish
         Location loc = location.getResult();
 
-        lat = String.valueOf(loc.getLatitude());
-        lng = String.valueOf(loc.getLongitude());
+        lat = String.format("%.6f", loc.getLatitude());
+        lng = String.format("%.6f", loc.getLongitude());
 
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
