@@ -23,6 +23,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.Activity;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,10 +49,13 @@ public class MainActivity extends AppCompatActivity {
     String SearchEndDate = "-";
     String Searchcaption = "-";
     String photoCaption = "";
-
-    LocationManager locationManager;
+    String lat = "";
+    String lng = "";
 
     int TEST = 1;
+
+    //Fused stuff, doing what the interwebs tells me
+    public FusedLocationProviderClient fusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
         }
+
+
+        //Stuff for location stuff, fusedlocation things that i dont know
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     //GJ Populate a photogallery so that the code hopefully stops breaking. Crashes all the bloody time,
@@ -138,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        File image = File.createTempFile(imageFileName, ".jpeg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
         Log.d("createImageFile", mCurrentPhotoPath);
         return image;
@@ -172,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
 
                 String[] editName = fileName.split("_");
 
-                fileName = editName[0] + "_" + editName[1] + "_" + editName[2] + "_" + photoCaption + "_" + editName[3];
+                fileName = editName[0] + "_" + editName[1] + "_" + editName[2] + "_" + photoCaption + "_" + editName[3] + "_" +
+                editName[4] + "_" + editName[5];
 
                 File newFile = new File(file, fileName);
 
@@ -266,17 +277,23 @@ public class MainActivity extends AppCompatActivity {
         ImageView mImageView = (ImageView) findViewById(R.id.ivGallery);
         TextView mDateView = (TextView) findViewById(R.id.timeStamp);
         TextView mCaptionView = (TextView) findViewById(R.id.captionText);
+        TextView mLatView = (TextView) findViewById(R.id.Lat);
+        TextView mLngView = (TextView) findViewById(R.id.Lng);
 
         mImageView.setRotation(90);
         mImageView.setImageBitmap(BitmapFactory.decodeFile(path));
         if (path != null) {
             String[] attr = path.split("_");
 
-            if (attr.length == 5) {
+            if (attr.length == 7) {
                 mDateView.setText(attr[1]);
                 mCaptionView.setText(attr[3]);
+                mLatView.setText(attr[4] + " Latitude");
+                mLngView.setText(attr[5] + " Longitude");
             } else {
                 mDateView.setText(attr[1]);
+                mLatView.setText(attr[3] + " Latitude");
+                mLngView.setText(attr[4] + " Longitude");
                 mCaptionView.setText("");
             }
         }
@@ -317,29 +334,28 @@ public class MainActivity extends AppCompatActivity {
             // for Activity#requestPermissions for more details.
             return;
         }
-        /*//boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        //boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        double lat = lastKnownLocation.getLatitude();
-        double lng = lastKnownLocation.getLongitude(); */
+        //Starts fused location client, gets location, puts it in location variable, pulls lat and lng out
+        Task<Location> location = fusedLocationClient.getLastLocation();
+        //Had to wait for the fusedlocationclient to obtain all the data, kept crashing before
+        while(!location.isComplete()){ }
+        //Turns out this code just blitzes through at the speed of light and doesn't allow process' to finish
+        Location loc = location.getResult();
 
+        lat = String.valueOf(loc.getLatitude());
+        lng = String.valueOf(loc.getLongitude());
 
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
         File[] fList = file.listFiles();
 
-        ExifInterface exif = new ExifInterface(fList[currentGalleryIndex]);
-        String lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-        String lng = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-
         String fileName = fList[currentGalleryIndex].getName();
 
         String[] editName = fileName.split("_");
 
-        fileName = editName[0] + "_" + editName[1] + "_" + editName [2] + "_" + lat + "_" + lng + "_" + editName[3];
+        fileName = editName[0] + "_" + editName[1] + "_" + editName[2] + "_" + lat + "_" + lng + "_" + editName[3];
 
-        File newFile = new File(file,fileName);
+        File newFile = new File(file, fileName);
 
         fList[currentGalleryIndex].renameTo(newFile);
         photoGallery = populateGallery();

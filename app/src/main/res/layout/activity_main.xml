@@ -39,25 +39,27 @@
         android:id="@+id/left"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
+        android:layout_marginStart="60dp"
         android:layout_marginLeft="60dp"
+        android:layout_marginBottom="72dp"
         android:onClick="moveLeft"
         android:text="Left" />
+
 
     <Button
         android:id="@+id/right"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
+        android:layout_marginBottom="74dp"
         android:onClick="moveRight"
         android:text="Right" />
-
 
     <Button
         android:id="@+id/btnSearch"
@@ -66,9 +68,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="11dp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginBottom="9dp"
         android:onClick="SearchPicture"
         android:text="Search" />
+
 
     <Button
         android:id="@+id/Caption"
@@ -77,11 +80,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="149dp"
+        android:layout_marginEnd="160dp"
         android:layout_marginBottom="9dp"
         android:onClick="Caption"
         android:text="caption" />
-
 
     <TextView
         android:id="@+id/timeStamp"
@@ -89,8 +91,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/left"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="-15dp"
-        android:layout_marginBottom="89dp"
+        android:layout_marginEnd="-18dp"
+        android:layout_marginBottom="113dp"
         android:layout_toStartOf="@+id/right"
         android:text="TimeStamp"
         android:textAlignment="center"
@@ -103,12 +105,36 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/left"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="-13dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginEnd="-15dp"
+        android:layout_marginBottom="68dp"
         android:layout_toStartOf="@+id/right"
         android:text="Caption"
         android:textAlignment="center"
         android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Lat"
+        android:layout_width="86dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/left"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginBottom="16dp"
+        android:text="Lat"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Lng"
+        android:layout_width="86dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/right"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="63dp"
+        android:layout_marginBottom="16dp"
+        android:text="Lng"
+        android:textAlignment="center"
         android:textStyle="bold" />
 
 </RelativeLayout>
