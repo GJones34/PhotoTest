@@ -1,5 +1,7 @@
 package com.example.phototest;
 
+import com.example.phototest.support_package.DistanceCalc;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -12,7 +14,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationManager;
-import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 0;
     public static final int CAPTION_SET_CODE = 2;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    DistanceCalc DistanceCalc = new DistanceCalc();
 
     String SearchStartDate = "-";
     String SearchEndDate = "-";
@@ -291,13 +294,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if(SearchLatitude.equals("-")||SearchLongitude.equals("-")||SearchRadius.equals("-")){
                     SearchLocationStatus = true;
-                }else if(DistanceCoords(LAT,LON,Float.parseFloat(SearchLatitude),Float.parseFloat(SearchLongitude)) < Double.parseDouble(SearchRadius)){///////////////////////////////////////////////////////////////////NEEDS EDIT AFTER FUNCTION IS COMPLETE
+                }else if(DistanceCalc.DistanceCoords(LAT,LON,Float.parseFloat(SearchLatitude),Float.parseFloat(SearchLongitude)) < Double.parseDouble(SearchRadius)){////////////////////NEEDS EDIT AFTER FUNCTION IS COMPLETE
                     SearchLocationStatus = true;
                 }else{
                     SearchLocationStatus = false;
                 }
 
-                if ((SearchminDateStatus == true) && (SearchmaxDateStatus == true) && (SearchcaptionStatus == true)) {
+                if ((SearchminDateStatus == true) && (SearchmaxDateStatus == true) && (SearchcaptionStatus == true) && SearchLocationStatus == true) {
                     photoGallery.add(f.getPath());
                 }
 
@@ -305,23 +308,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+        // CL if
+        if(photoGallery.size() == 0){
+            Date minDate = new Date(Long.MIN_VALUE);
+            Date maxDate = new Date(Long.MAX_VALUE);
+            photoGallery = createGallery(minDate, maxDate);
+        }
         return photoGallery;
     }
-
-
-    //LA Determine distance between Coordinates 1 and 2
-    private double DistanceCoords(float Lat1, float Long1, float Lat2, float Long2) {
-        float EarthRad = 6371;
-        double dLat = (3.1415/180)*(Lat2 - Lat1);
-        double dLong = (3.1419/180)*(Long2 - Long1);
-
-        double a = sin(dLat/2) * sin(dLat/2) + cos((3.1415/180)*Lat1) * cos((3.1415/180)*Lat2) * sin(dLong/2) * sin(dLong/2);
-        double c = 2*asin(sqrt(a));
-        double d = EarthRad * c;
-
-        return d;
-    }
-
 
     //GJ Display the photo on the screen
     private void displayGallery(String path) {
