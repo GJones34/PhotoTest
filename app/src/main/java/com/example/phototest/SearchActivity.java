@@ -26,12 +26,37 @@ public class SearchActivity extends AppCompatActivity {
         EditText radius = findViewById(R.id.Radius);
 
         Intent i = new Intent();
-        i.putExtra("STARTDATE", starttime.getText().toString());
-        i.putExtra("ENDDATE", endtime.getText().toString());
-        i.putExtra("CAPTION", caption.getText().toString());
-        i.putExtra("LATITUDE", latitude.getText().toString());
-        i.putExtra("LONGITUDE", longitude.getText().toString());
-        i.putExtra("RADIUS", radius.getText().toString());
+        if (starttime.getText().toString().equals("")) {
+            i.putExtra("STARTDATE", "-");
+        } else {
+            i.putExtra("STARTDATE", starttime.getText().toString());
+            String x = starttime.getText().toString();
+        }
+        if (endtime.getText().toString().equals("")) {
+            i.putExtra("ENDDATE", "-");
+        } else {
+            i.putExtra("ENDDATE", endtime.getText().toString());
+        }
+        if (caption.getText().toString().equals("")) {
+            i.putExtra("CAPTION", "-");
+        } else {
+            i.putExtra("CAPTION", caption.getText().toString());
+        }
+        if (latitude.getText().toString().equals("")) {
+            i.putExtra("LATITUDE", "-");
+        } else {
+            i.putExtra("LATITUDE", latitude.getText().toString());
+        }
+        if (longitude.getText().toString().equals("")) {
+            i.putExtra("LONGITUDE", "-");
+        } else {
+            i.putExtra("LONGITUDE", longitude.getText().toString());
+        }
+        if (radius.getText().toString().equals("")) {
+            i.putExtra("RADIUS" , "-");
+        } else {
+            i.putExtra("RADIUS", radius.getText().toString());
+        }
         setResult(RESULT_OK, i);
         finish();
     }
