@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(separated.length == 7){
-                    FileCap = separated[5];
+                    FileCap = separated[3];
                 }else{
                     FileCap = "-";
                 }
