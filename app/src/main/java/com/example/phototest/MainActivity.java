@@ -10,35 +10,34 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.app.Activity;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.regex.Pattern;
-
-import static java.lang.Math.asin;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import java.util.Scanner;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -64,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
     String lng = "";
 
     int TEST = 1;
+
+    //This is the weird photo upload stuff, praying to Azkaban for it to work
+    Bitmap bitmap;
 
     //Fused stuff, doing what the interwebs tells me
     public FusedLocationProviderClient fusedLocationClient;
@@ -100,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
         }
-
 
         //Stuff for location stuff, fusedlocation things that i dont know
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -413,19 +414,101 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //LA Uploads photo currently being viewed in the gallery to facebook as your profile pic
-    public void UploadPicture(View v) {
-
+    public void UploadPicture(View v) throws IOException {
+        //This code just gets the image and converts to a bitmap, theoretically
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/com.example.phototest/files/Pictures");
         File[] fList = file.listFiles();
         String Filename = "/storage/emulated/0/Android/data/com.example.phototest/files/Pictures/" + fList[currentGalleryIndex].getName();
-        Uri uri = Uri.parse(Filename);
 
-        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri); // set uri
-        shareIntent.setPackage("com.facebook.katana");
-        startActivity(shareIntent);
+        //This is the old URI stuff, maybe dont need???
+        //Uri uri = Uri.parse(Filename);
+        //Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+        //shareIntent.putExtra(Intent.EXTRA_STREAM, uri); // set uri
+        //shareIntent.setType("image/*");
 
+        //This is the newer bitmap stuff to send across the wonderful galaxy of who knows
+        bitmap = BitmapFactory.decodeFile(Filename);
+
+        new UploadPhotoTask().execute();
+    }
+
+    private class UploadPhotoTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String...urls){
+            /*Code to hopefully send across the ether to the wonderful world of Tom the Cat
+            Implements the HttpURLConnection stuff and posts across an output stream? Or at
+            least thats my hopes and dreams for this. */
+            HttpURLConnection urlConnection = null;
+			
+			String lineEnd = "\r\n";
+			String twoHyphens = "--";
+			String boundary = "*****";
+			int bytesRead, bytesAvailable, bufferSize;
+			byte[] buffer;
+			int maxBufferSize = 1 * 1024 * 1024;
+			int serverResponseCode = 0;
+			
+			File photo = new File(mCurrentPhotoPath);
+			String name = photo.getName();
+			
+			
+            try{
+				FileInputStream fileInputStream = new FileInputStream(photo);
+                URL url = new URL("http://10.0.2.2:9091/PhotoServer/sends");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setDoOutput(true);
+				urlConnection.setDoInput(true);
+				urlConnection.setUseCaches(false);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Connection", "Keep-Alive");
+				urlConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
+				urlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+				urlConnection.setRequestProperty("uploadedfile", name);
+
+                DataOutputStream output = new DataOutputStream(urlConnection.getOutputStream());
+				output.writeBytes(twoHyphens + boundary + lineEnd);
+				output.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + name + "\"" + lineEnd);
+				output.writeBytes(lineEnd);
+				
+				bytesAvailable = fileInputStream.available();
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				buffer = new byte[bufferSize];
+
+				// read file and write it into form...
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+				while (bytesRead > 0) {
+					output.write(buffer, 0, bufferSize);
+					bytesAvailable = fileInputStream.available();
+					bufferSize = Math.min(bytesAvailable, maxBufferSize);
+					bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+				}
+				
+				output.writeBytes(lineEnd);
+				output.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                serverResponseCode = urlConnection.getResponseCode();
+                String serverResponseMessage = urlConnection.getResponseMessage();
+				Log.i("uploadFile", "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+
+				if(serverResponseCode == 200){
+					Log.e("uploadFile", "File Uploaded.");
+                }
+				
+				fileInputStream.close();
+				output.flush();
+				output.close();
+
+            } catch (Exception e) {
+                Log.e("ImageUploader", "Error uploading image " + e.getMessage(), e);
+            } finally{
+                if (urlConnection !=null) {
+                    urlConnection.disconnect();
+                }
+            }
+
+            return null;
+        }
     }
 }
