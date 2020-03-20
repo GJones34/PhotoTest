@@ -464,11 +464,11 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setRequestProperty("Connection", "Keep-Alive");
 				urlConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
 				urlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-				urlConnection.setRequestProperty("uploadedfile", name);
+				urlConnection.setRequestProperty("uploaded_file", name);
 
                 DataOutputStream output = new DataOutputStream(urlConnection.getOutputStream());
 				output.writeBytes(twoHyphens + boundary + lineEnd);
-				output.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + name + "\"" + lineEnd);
+				output.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + name + "\"" + lineEnd);
 				output.writeBytes(lineEnd);
 				
 				bytesAvailable = fileInputStream.available();
